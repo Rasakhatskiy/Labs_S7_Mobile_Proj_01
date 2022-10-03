@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Code/Android/S07_mobile_proj_1/app/src/main/res/drawable/bg_top_corner.xml" value="0.1" />
+        <entry key="..\:/Code/Android/S07_mobile_proj_1/app/src/main/res/layout/activity_create_ellips.xml" value="0.36666666666666664" />
         <entry key="..\:/Code/Android/S07_mobile_proj_1/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
         <entry key="..\:/Code/Android/S07_mobile_proj_1/app/src/main/res/layout/content_main.xml" value="0.2957427536231884" />
+        <entry key="..\:/Code/Android/S07_mobile_proj_1/app/src/main/res/layout/create_ellipse.xml" value="0.1" />
         <entry key="..\:/Code/Android/S07_mobile_proj_1/app/src/main/res/layout/fragment_first.xml" value="0.2957427536231884" />
         <entry key="..\:/Code/Android/S07_mobile_proj_1/app/src/main/res/layout/fragment_second.xml" value="0.2957427536231884" />
         <entry key="..\:/Code/Android/S07_mobile_proj_1/app/src/main/res/menu/menu_main.xml" value="0.36666666666666664" />

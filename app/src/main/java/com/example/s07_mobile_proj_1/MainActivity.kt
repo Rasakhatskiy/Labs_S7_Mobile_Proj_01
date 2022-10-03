@@ -1,13 +1,12 @@
 package com.example.s07_mobile_proj_1
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
@@ -21,9 +20,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.createFab.setOnClickListener{ manageMenu() }
+
+        binding.ellipseFab.setOnClickListener {
+            val intent = Intent(this, CreateEllipseActivity::class.java)
+            startActivity(intent)
+        }
+
+
         manageMenu()
     }
 
