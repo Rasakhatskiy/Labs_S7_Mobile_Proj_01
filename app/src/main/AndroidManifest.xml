@@ -10,9 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.S07_mobile_proj_1">
         <activity
+            android:name=".ShowPlotActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".CreateEllipseActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
