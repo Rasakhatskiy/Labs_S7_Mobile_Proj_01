@@ -11,7 +11,8 @@
         android:theme="@style/Theme.S07_mobile_proj_1">
         <activity
             android:name=".ShowPlotActivity"
-            android:exported="false">
+            android:exported="false"
+            android:parentActivityName=".CreateEllipseActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
