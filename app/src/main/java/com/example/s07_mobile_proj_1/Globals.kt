@@ -21,7 +21,7 @@ class Globals {
         }
 
         fun SolveYforHyperbola(x: Float): Float {
-            return sqrt(b.pow(2) + (b.pow(2) * x.pow(2) / a.pow(2)))
+            return sqrt((b.pow(2) * x.pow(2) / a.pow(2)) - b.pow(2))
         }
 
         fun SolveYforParabola(x: Float): Float {

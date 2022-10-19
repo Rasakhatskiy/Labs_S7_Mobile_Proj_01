@@ -8,6 +8,9 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import kotlin.collections.ArrayList
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 class ShowPlotActivity : AppCompatActivity() {
 
@@ -20,7 +23,14 @@ class ShowPlotActivity : AppCompatActivity() {
         binding = ActivityShowPlotBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.title = "Wow! Nice Ellipse 😎"
+
+        when(Globals.type) {
+            ConicSectionType.Ellipse -> supportActionBar!!.title = "Wow! Nice Ellipse 😎"
+            ConicSectionType.Hyperbola -> supportActionBar!!.title = "Wow! Nice Hyperbola 😍"
+            ConicSectionType.Parabola -> supportActionBar!!.title = "Wow! Nice Parabola 🙀"
+        }
+
+
 
         setLineChartData()
     }
@@ -32,8 +42,11 @@ class ShowPlotActivity : AppCompatActivity() {
         val lineEntry4 = ArrayList<Entry>()
 
         if (Globals.type == ConicSectionType.Ellipse) {
+            Globals.a = abs(Globals.a)
+            Globals.b = abs(Globals.b)
+
             val range = Globals.a * 2
-            val step = range / 1000
+            val step = abs(range) / 1000
 
             var x = -Globals.a
             while (x <= Globals.a) {
@@ -45,8 +58,11 @@ class ShowPlotActivity : AppCompatActivity() {
         }
 
         if (Globals.type == ConicSectionType.Hyperbola) {
+            Globals.a = abs(Globals.a)
+            Globals.b = abs(Globals.b)
+
             val range = Globals.a * 2
-            val step = range / 1000
+            val step = abs(range) / 1000
 
             var x = -Globals.a - range
             while (x <= -Globals.a) {
@@ -54,6 +70,13 @@ class ShowPlotActivity : AppCompatActivity() {
                 lineEntry1.add(Entry(x, y))
                 lineEntry2.add(Entry(x, -y))
                 x += step
+            }
+
+            if (x != -Globals.a) {
+                x = -Globals.a
+                val y = Globals.SolveYforHyperbola(x)
+                lineEntry1.add(Entry(x, y))
+                lineEntry2.add(Entry(x, -y))
             }
 
             x = Globals.a
@@ -67,7 +90,26 @@ class ShowPlotActivity : AppCompatActivity() {
 
         }
 
+        if (Globals.type == ConicSectionType.Parabola) {
+            val range = Globals.a * 2
+            val step = abs(range) / 1000
 
+            var x = min(range, 0f)
+            var dest = max(range, 0f)
+            while (x <= dest) {
+                val y = Globals.SolveYforParabola(x)
+                lineEntry1.add(Entry(x, y))
+                lineEntry2.add(Entry(x, -y))
+                x += step
+            }
+
+            if (x != dest) {
+                x = dest
+                val y = Globals.SolveYforParabola(x)
+                lineEntry1.add(Entry(x, y))
+                lineEntry2.add(Entry(x, -y))
+            }
+        }
 
         val lineDataset1 = LineDataSet(lineEntry1, "")
         lineDataset1.color = R.color.purple_500
@@ -91,7 +133,8 @@ class ShowPlotActivity : AppCompatActivity() {
 
         when(Globals.type) {
             ConicSectionType.Ellipse -> data = LineData(lineDataset1, lineDataset2)
-            ConicSectionType.Hyperbola -> LineData(lineDataset1/*, lineDataset2, lineDataset3, lineDataset4*/)
+            ConicSectionType.Hyperbola -> data = LineData(lineDataset1, lineDataset2, lineDataset3, lineDataset4)
+            ConicSectionType.Parabola -> data = LineData(lineDataset1, lineDataset2)
         }
 
 

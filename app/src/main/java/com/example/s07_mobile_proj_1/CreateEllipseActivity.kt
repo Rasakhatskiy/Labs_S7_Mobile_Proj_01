@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View.*
 import android.widget.Toast
 import com.example.s07_mobile_proj_1.databinding.ActivityCreateEllipsBinding
 
@@ -27,6 +28,13 @@ class CreateEllipseActivity : AppCompatActivity() {
 
         binding.ellipseInputA.filters = Array(1) { InputStuff.getRealNumberFilter() }
         binding.ellipseInputB.filters = Array(1) { InputStuff.getRealNumberFilter() }
+
+        if (Globals.type == ConicSectionType.Parabola) {
+            binding.ellipseInputBP.visibility = GONE
+        } else {
+            binding.ellipseInputBP.visibility = VISIBLE
+        }
+
 
         binding.buttonShowPlot.setOnClickListener {
             var a = 0f
