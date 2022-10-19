@@ -18,30 +18,35 @@ class CreateEllipseActivity : AppCompatActivity() {
         binding = ActivityCreateEllipsBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.title = "Create Ellipse"
+        when(Globals.type) {
+            ConicSectionType.Ellipse -> supportActionBar!!.title = "Create Ellipse"
+            ConicSectionType.Parabola -> supportActionBar!!.title = "Create Parabola"
+            ConicSectionType.Hyperbola -> supportActionBar!!.title = "Create Hyperbola"
+            ConicSectionType.None -> TODO()
+        }
 
         binding.ellipseInputA.filters = Array(1) { InputStuff.getRealNumberFilter() }
         binding.ellipseInputB.filters = Array(1) { InputStuff.getRealNumberFilter() }
 
         binding.buttonShowPlot.setOnClickListener {
-            var a: Double = 0.0
-            var b: Double = 0.0
+            var a = 0f
+            var b = 0f
             try {
-                a = binding.ellipseInputA.text.toString().toDouble()
-                b = binding.ellipseInputB.text.toString().toDouble()
+                a = binding.ellipseInputA.text.toString().toFloat()
+                b = binding.ellipseInputB.text.toString().toFloat()
             } catch (e: NumberFormatException) {
-                Toast.makeText(applicationContext,"Invalid input!!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Invalid input!!!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (a == 0.0 || b == 0.0) {
-                Toast.makeText(applicationContext,"Division by 0!!!", Toast.LENGTH_SHORT).show()
+            if (a == 0f || b == 0f) {
+                Toast.makeText(applicationContext, "Division by 0!!!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             Globals.a = a
             Globals.b = b
-            Globals.type = ConicSectionType.Ellipse
+//            Globals.type = ConicSectionType.Ellipse
 
             val intent = Intent(this, ShowPlotActivity::class.java)
             startActivity(intent)

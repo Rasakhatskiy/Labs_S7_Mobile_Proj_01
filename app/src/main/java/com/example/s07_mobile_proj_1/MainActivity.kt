@@ -27,6 +27,19 @@ class MainActivity : AppCompatActivity() {
         binding.createFab.setOnClickListener{ manageMenu() }
 
         binding.ellipseFab.setOnClickListener {
+            Globals.type = ConicSectionType.Ellipse
+            val intent = Intent(this, CreateEllipseActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.parabolaFab.setOnClickListener {
+            Globals.type = ConicSectionType.Parabola
+            val intent = Intent(this, CreateEllipseActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.hyperbolaFab.setOnClickListener {
+            Globals.type = ConicSectionType.Hyperbola
             val intent = Intent(this, CreateEllipseActivity::class.java)
             startActivity(intent)
         }
