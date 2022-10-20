@@ -41,20 +41,27 @@ class CreateEllipseActivity : AppCompatActivity() {
             var b = 0f
             try {
                 a = binding.ellipseInputA.text.toString().toFloat()
-                b = binding.ellipseInputB.text.toString().toFloat()
+
+                if (Globals.type != ConicSectionType.Parabola) {
+                    b = binding.ellipseInputB.text.toString().toFloat()
+                }
             } catch (e: NumberFormatException) {
                 Toast.makeText(applicationContext, "Invalid input!!!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (a == 0f || b == 0f) {
+            if (a == 0f) {
+                Toast.makeText(applicationContext, "Division by 0!!!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (b == 0f && Globals.type != ConicSectionType.Parabola) {
                 Toast.makeText(applicationContext, "Division by 0!!!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             Globals.a = a
             Globals.b = b
-//            Globals.type = ConicSectionType.Ellipse
 
             val intent = Intent(this, ShowPlotActivity::class.java)
             startActivity(intent)

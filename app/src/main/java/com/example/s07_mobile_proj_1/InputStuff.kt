@@ -1,6 +1,7 @@
 package com.example.s07_mobile_proj_1
 
 import android.text.InputFilter
+import androidx.core.text.isDigitsOnly
 
 
 class InputStuff {
@@ -29,6 +30,19 @@ class InputStuff {
                     return@InputFilter "."
                 }
 
+                null
+            }
+        }
+
+        fun isOnlyLetters(word: String): Boolean {
+            val regex = "^[[A-Za-z0-9]+ .,_-]*$".toRegex()
+            return regex.matches(word)}
+
+        fun getNameFilter(): InputFilter {
+            return InputFilter { source, start, end, dest, dstart, dend ->
+                if (!isOnlyLetters(source.toString())) {
+                    return@InputFilter ""
+                }
                 null
             }
         }

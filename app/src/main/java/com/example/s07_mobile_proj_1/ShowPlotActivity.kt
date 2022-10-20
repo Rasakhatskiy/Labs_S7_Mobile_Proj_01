@@ -1,12 +1,22 @@
 package com.example.s07_mobile_proj_1
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.s07_mobile_proj_1.databinding.ActivityShowPlotBinding
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
+import java.io.File
+import java.io.IOException
+import java.io.PrintWriter
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.prefs.Preferences
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.max
@@ -24,13 +34,15 @@ class ShowPlotActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        when(Globals.type) {
+        when (Globals.type) {
             ConicSectionType.Ellipse -> supportActionBar!!.title = "Wow! Nice Ellipse 😎"
             ConicSectionType.Hyperbola -> supportActionBar!!.title = "Wow! Nice Hyperbola 😍"
             ConicSectionType.Parabola -> supportActionBar!!.title = "Wow! Nice Parabola 🙀"
         }
 
-
+        binding.buttonSaveFigure.setOnClickListener {
+            showdialog()
+        }
 
         setLineChartData()
     }
@@ -131,9 +143,10 @@ class ShowPlotActivity : AppCompatActivity() {
 
         var data = LineData(lineDataset1, lineDataset2)
 
-        when(Globals.type) {
+        when (Globals.type) {
             ConicSectionType.Ellipse -> data = LineData(lineDataset1, lineDataset2)
-            ConicSectionType.Hyperbola -> data = LineData(lineDataset1, lineDataset2, lineDataset3, lineDataset4)
+            ConicSectionType.Hyperbola -> data =
+                LineData(lineDataset1, lineDataset2, lineDataset3, lineDataset4)
             ConicSectionType.Parabola -> data = LineData(lineDataset1, lineDataset2)
         }
 
@@ -145,4 +158,62 @@ class ShowPlotActivity : AppCompatActivity() {
         binding.lineChart.setScaleEnabled(true)
         binding.lineChart.legend.isEnabled = false
     }
+
+    private fun showdialog() {
+        val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Save figure as")
+
+        val input = EditText(this)
+
+        input.hint = "Enter Name"
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        input.filters = Array(1) { InputStuff.getNameFilter() }
+        builder.setView(input)
+
+        builder.setPositiveButton("OK") { _, _ ->
+            val text = input.text.toString()
+//            write(text)
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+        builder.show()
+    }
+
+    private fun checkFileExistEvent(filename: String) {
+        if (Files.isRegularFile(Paths.get(filename))) {
+            val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+            builder.setTitle("Confirm overwrite")
+            builder.setMessage("File already exists. Overwrite it?")
+            builder.setPositiveButton("Yes") { _, _ ->
+                val file = File(filename)
+                file.delete()
+            }
+            builder.setNegativeButton("No") { dialog, _ -> dialog.cancel()}
+            val alert = builder.create()
+            alert.show()
+        }
+    }
+
+    fun saveToInternal(filename: String): Boolean {
+        checkFileExistEvent(filename)
+
+        return try {
+            openFileOutput(filename, MODE_PRIVATE).use { stream ->
+//                stream.write(Globals.a.)
+                true
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            false
+        }
+
+
+        val writer = PrintWriter(filename)  // java.io.PrintWriter
+        writer.write(Globals.a.toString())
+        writer.write(Globals.b.toString())
+        writer.write(Globals.type.toString())
+        writer.close()
+    }
+
+
+
 }
