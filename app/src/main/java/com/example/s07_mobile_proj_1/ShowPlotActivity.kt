@@ -1,7 +1,6 @@
 package com.example.s07_mobile_proj_1
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
@@ -9,18 +8,15 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.s07_mobile_proj_1.databinding.ActivityShowPlotBinding
-import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import java.io.BufferedWriter
 import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
-import java.io.PrintWriter
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.util.prefs.Preferences
-import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -175,31 +171,39 @@ class ShowPlotActivity : AppCompatActivity() {
 
         builder.setPositiveButton("OK") { _, _ ->
             val text = input.text.toString()
-            saveToInternal(text)
-            val toast = Toast.makeText(applicationContext, filesDir.absolutePath, Toast.LENGTH_SHORT)
-            toast.show()
+            checkFileExistEvent(text)
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
         builder.show()
     }
 
+    private fun fileExists(filename: String): Boolean {
+        val dir = filesDir
+        val file = File(dir, filename)
+        return file.exists()
+    }
+
     private fun checkFileExistEvent(filename: String) {
-        if (Files.isRegularFile(Paths.get(filename))) {
+        if (fileExists(filename)) {
             val builder: AlertDialog.Builder = android.app.AlertDialog.Builder(this)
             builder.setTitle("Confirm overwrite")
             builder.setMessage("File already exists. Overwrite it?")
             builder.setPositiveButton("Yes") { _, _ ->
                 val file = File(filename)
                 file.delete()
+                saveToInternal(filename)
+                Toast.makeText(applicationContext, "saved", Toast.LENGTH_SHORT).show()
             }
             builder.setNegativeButton("No") { dialog, _ -> dialog.cancel()}
             val alert = builder.create()
             alert.show()
+        } else {
+            saveToInternal(filename)
+            Toast.makeText(applicationContext, "saved", Toast.LENGTH_SHORT).show()
         }
     }
 
     fun saveToInternal(filename: String): Boolean {
-//        checkFileExistEvent(filename)
         return try {
             val savedFigure = SavedFigure(filename, Globals.type, Globals.a, Globals.b)
             openFileOutput(filename, MODE_PRIVATE).use { stream ->

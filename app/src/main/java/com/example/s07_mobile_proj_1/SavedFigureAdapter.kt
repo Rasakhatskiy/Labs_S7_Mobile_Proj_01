@@ -23,7 +23,7 @@ class SavedFigureAdapter(var listener: Listener): RecyclerView.Adapter<SavedFigu
 
     fun addSavedFigure(savedFigure: SavedFigure) {
         savedFigureList.add(savedFigure)
-        notifyDataSetChanged()
+        notifyItemInserted(savedFigureList.size-1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NameHolder {
