@@ -12,8 +12,10 @@ import com.example.s07_mobile_proj_1.databinding.ActivityShowPlotBinding
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
+import java.io.BufferedWriter
 import java.io.File
 import java.io.IOException
+import java.io.OutputStreamWriter
 import java.io.PrintWriter
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -199,24 +201,26 @@ class ShowPlotActivity : AppCompatActivity() {
     fun saveToInternal(filename: String): Boolean {
 //        checkFileExistEvent(filename)
         return try {
-            var savedFigure = SavedFigure(filename, Globals.type, Globals.a, Globals.b)
+            val savedFigure = SavedFigure(filename, Globals.type, Globals.a, Globals.b)
             openFileOutput(filename, MODE_PRIVATE).use { stream ->
-                stream.write("bebra".toByteArray())
-                true
+                OutputStreamWriter(stream).use { outputStreamWriter ->
+                    BufferedWriter(outputStreamWriter).use { bufferedWriter ->
+                        bufferedWriter.write(savedFigure.name)
+                        bufferedWriter.newLine()
+                        bufferedWriter.write(savedFigure.type.toString())
+                        bufferedWriter.newLine()
+                        bufferedWriter.write(savedFigure.a.toString())
+                        bufferedWriter.newLine()
+                        bufferedWriter.write(savedFigure.b.toString())
+                        bufferedWriter.newLine()
+                        true
+                    }
+                }
             }
         } catch (e: IOException) {
             e.printStackTrace()
             false
         }
-
-
-
-
-//        val writer = PrintWriter(filename)  // java.io.PrintWriter
-//        writer.write(Globals.a.toString())
-//        writer.write(Globals.b.toString())
-//        writer.write(Globals.type.toString())
-//        writer.close()
     }
 
 

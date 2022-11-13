@@ -9,20 +9,25 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.s07_mobile_proj_1.databinding.ActivityMainBinding
+import java.io.BufferedReader
 import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SavedFigureAdapter.Listener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private var isFabOpen = true
 
-    private val adapter = SavedFigureAdapter()
+    private val adapter = SavedFigureAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.createFab.setOnClickListener{ manageMenu() }
+        binding.createFab.setOnClickListener { manageMenu() }
 
         binding.ellipseFab.setOnClickListener {
             Globals.type = ConicSectionType.Ellipse
@@ -86,11 +91,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun manageMenu() {
-        if(isFabOpen){
+        if (isFabOpen) {
             isFabOpen = false
             binding.createFab.setImageResource(R.drawable.ic_create_new)
-            binding.createFab.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
-            binding.createFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black))
+            binding.createFab.imageTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
+            binding.createFab.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black))
 
             binding.layoutMenu.setBackgroundResource(0)
             binding.ellipseFab.hide()
@@ -99,8 +106,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             isFabOpen = true
             binding.createFab.setImageResource(R.drawable.ic_close)
-            binding.createFab.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black))
-            binding.createFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
+            binding.createFab.imageTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.black))
+            binding.createFab.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
 
             binding.layoutMenu.setBackgroundResource(R.drawable.bg_top_corner)
             binding.ellipseFab.show()
@@ -129,5 +138,42 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    fun readFromInternal(filename: String): SavedFigure {
+        var name: String
+        var type: ConicSectionType = ConicSectionType.None
+        var a = 0.0f
+        var b = 0.0f
+
+        try {
+            openFileInput(filename).use { stream ->
+                InputStreamReader(stream).use { inputStreamReader ->
+                    BufferedReader(inputStreamReader).use { bufferedReader ->
+                        val strName = bufferedReader.readLine()
+                        name = strName
+                        val strType = bufferedReader.readLine()
+                        type = ConicSectionType.valueOf(strType)
+                        val strA = bufferedReader.readLine()
+                        a = strA.toFloat()
+                        val strB = bufferedReader.readLine()
+                        b = strB.toFloat()
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return SavedFigure("", ConicSectionType.None, 0.0f, 0.0f)
+        }
+        return SavedFigure(name, type, a, b)
+    }
+
+    override fun onClick(savedFigure: SavedFigure) {
+        val res = readFromInternal(savedFigure.name)
+        Globals.type = res.type
+        Globals.a = res.a
+        Globals.b = res.b
+        val intent = Intent(this, ShowPlotActivity::class.java)
+        startActivity(intent)
     }
 }

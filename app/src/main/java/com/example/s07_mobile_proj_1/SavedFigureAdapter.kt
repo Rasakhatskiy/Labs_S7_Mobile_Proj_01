@@ -6,14 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.s07_mobile_proj_1.databinding.SavedFigureItemBinding
 
-class SavedFigureAdapter: RecyclerView.Adapter<SavedFigureAdapter.NameHolder>() {
+class SavedFigureAdapter(var listener: Listener): RecyclerView.Adapter<SavedFigureAdapter.NameHolder>() {
 
     val savedFigureList = ArrayList<SavedFigure>()
 
     class NameHolder(item: View): RecyclerView.ViewHolder(item) {
         val binding = SavedFigureItemBinding.bind(item)
-        fun bind(savedFigure: SavedFigure) {
+        fun bind(savedFigure: SavedFigure, listener: Listener) {
             binding.tvTitle.text = savedFigure.name
+
+            itemView.setOnClickListener {
+                listener.onClick(savedFigure)
+            }
         }
     }
 
@@ -28,11 +32,17 @@ class SavedFigureAdapter: RecyclerView.Adapter<SavedFigureAdapter.NameHolder>() 
     }
 
     override fun onBindViewHolder(holder: NameHolder, position: Int) {
-        holder.bind(savedFigureList[position])
+        holder.bind(savedFigureList[position], listener)
     }
 
     override fun getItemCount(): Int {
         return savedFigureList.size
+    }
+
+    interface Listener {
+        fun onClick(savedFigure: SavedFigure) {
+
+        }
     }
 
 }
