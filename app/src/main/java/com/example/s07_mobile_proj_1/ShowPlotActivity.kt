@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.s07_mobile_proj_1.databinding.ActivityShowPlotBinding
 import com.github.mikephil.charting.data.LineDataSet
@@ -172,7 +173,9 @@ class ShowPlotActivity : AppCompatActivity() {
 
         builder.setPositiveButton("OK") { _, _ ->
             val text = input.text.toString()
-//            write(text)
+            saveToInternal(text)
+            val toast = Toast.makeText(applicationContext, filesDir.absolutePath, Toast.LENGTH_SHORT)
+            toast.show()
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
         builder.show()
@@ -194,11 +197,11 @@ class ShowPlotActivity : AppCompatActivity() {
     }
 
     fun saveToInternal(filename: String): Boolean {
-        checkFileExistEvent(filename)
-
+//        checkFileExistEvent(filename)
         return try {
+            var savedFigure = SavedFigure(filename, Globals.type, Globals.a, Globals.b)
             openFileOutput(filename, MODE_PRIVATE).use { stream ->
-//                stream.write(Globals.a.)
+                stream.write("bebra".toByteArray())
                 true
             }
         } catch (e: IOException) {
@@ -207,11 +210,13 @@ class ShowPlotActivity : AppCompatActivity() {
         }
 
 
-        val writer = PrintWriter(filename)  // java.io.PrintWriter
-        writer.write(Globals.a.toString())
-        writer.write(Globals.b.toString())
-        writer.write(Globals.type.toString())
-        writer.close()
+
+
+//        val writer = PrintWriter(filename)  // java.io.PrintWriter
+//        writer.write(Globals.a.toString())
+//        writer.write(Globals.b.toString())
+//        writer.write(Globals.type.toString())
+//        writer.close()
     }
 
 

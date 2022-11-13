@@ -10,13 +10,19 @@ import androidx.navigation.ui.navigateUp
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.s07_mobile_proj_1.databinding.ActivityMainBinding
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private var isFabOpen = true
+
+    private val adapter = SavedFigureAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +50,39 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.apply {
+            rcView.layoutManager = GridLayoutManager(this@MainActivity, 1)
+            rcView.adapter = adapter
+        }
 
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                if (direction == ItemTouchHelper.RIGHT) {
+                    val position = viewHolder.adapterPosition
+                    deleteFile(adapter.savedFigureList[position].name)
+                    adapter.savedFigureList.removeAt(position)
+                    binding.rcView.adapter?.notifyItemRemoved(position)
+                }
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(binding.rcView)
+
+        fillAdapter()
         manageMenu()
+    }
+
+    private fun fillAdapter() {
+        var ignoreFirst = true
+        File(filesDir.absolutePath).walk().forEach {
+            // first name is name of the dir
+            if (ignoreFirst) {
+                ignoreFirst = false
+            } else {
+                adapter.addSavedFigure(SavedFigure(it.name, ConicSectionType.None, 0.0f, 0.0f))
+            }
+        }
     }
 
     private fun manageMenu() {

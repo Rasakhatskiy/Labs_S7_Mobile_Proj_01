@@ -8,6 +8,7 @@
 
 
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutMenu"
         android:layout_width="wrap_content"
@@ -77,4 +78,9 @@
             tools:ignore="MissingConstraints"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>
