@@ -11,85 +11,92 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/bg_top_corner"
-        android:paddingStart="50dp"
-        android:paddingTop="50dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="10dp">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/create_fab"
-            style="@style/Widget.Design.FloatingActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_create_new"
-            app:backgroundTint="@color/white"
-            app:elevation="5dp"
-            app:fabSize="normal"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bg_top_corner"
+            android:paddingStart="50dp"
+            android:paddingTop="50dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/parabola_fab"
-            style="@style/Widget.Design.FloatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_parabola"
-            app:backgroundTint="@color/white"
-            app:fabSize="normal"
-            app:layout_constraintCircle="@id/create_fab"
-            app:layout_constraintCircleAngle="0"
-            app:layout_constraintCircleRadius="90dp"
-            tools:ignore="MissingConstraints"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/create_fab"
+                style="@style/Widget.Design.FloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_create_new"
+                app:backgroundTint="@color/white"
+                app:elevation="5dp"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/hyperbola_fab"
-            style="@style/Widget.Design.FloatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_hyperbola"
-            app:backgroundTint="@color/white"
-            app:fabSize="normal"
-            app:layout_constraintCircle="@id/create_fab"
-            app:layout_constraintCircleAngle="315"
-            app:layout_constraintCircleRadius="90dp"
-            tools:ignore="MissingConstraints"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/parabola_fab"
+                style="@style/Widget.Design.FloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_parabola"
+                app:backgroundTint="@color/white"
+                app:fabSize="normal"
+                app:layout_constraintCircle="@id/create_fab"
+                app:layout_constraintCircleAngle="0"
+                app:layout_constraintCircleRadius="90dp"
+                tools:ignore="MissingConstraints" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/ellipse_fab"
-            style="@style/Widget.Design.FloatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_ellipse"
-            app:backgroundTint="@color/white"
-            app:fabSize="normal"
-            app:layout_constraintCircle="@id/create_fab"
-            app:layout_constraintCircleAngle="270"
-            app:layout_constraintCircleRadius="90dp"
-            tools:ignore="MissingConstraints"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/hyperbola_fab"
+                style="@style/Widget.Design.FloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_hyperbola"
+                app:backgroundTint="@color/white"
+                app:fabSize="normal"
+                app:layout_constraintCircle="@id/create_fab"
+                app:layout_constraintCircleAngle="315"
+                app:layout_constraintCircleRadius="90dp"
+                tools:ignore="MissingConstraints" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/ellipse_fab"
+                style="@style/Widget.Design.FloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_ellipse"
+                app:backgroundTint="@color/white"
+                app:fabSize="normal"
+                app:layout_constraintCircle="@id/create_fab"
+                app:layout_constraintCircleAngle="270"
+                app:layout_constraintCircleRadius="90dp"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="end"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header"
-        />
+        app:headerLayout="@layout/nav_header" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
