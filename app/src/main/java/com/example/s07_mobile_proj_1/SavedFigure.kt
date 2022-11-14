@@ -5,5 +5,6 @@ data class SavedFigure(
     val name: String,
     val type: ConicSectionType,
     val a: Float,
-    val b: Float
+    val b: Float,
+    val d: Float
 )

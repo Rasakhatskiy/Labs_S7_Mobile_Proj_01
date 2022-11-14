@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), SavedFigureAdapter.Listener {
             if (ignoreFirst) {
                 ignoreFirst = false
             } else {
-                adapter.addSavedFigure(SavedFigure(it.name, ConicSectionType.None, 0.0f, 0.0f))
+                adapter.addSavedFigure(SavedFigure(it.name, ConicSectionType.None, 0.0f, 0.0f, 0f))
             }
         }
     }
@@ -145,6 +145,7 @@ class MainActivity : AppCompatActivity(), SavedFigureAdapter.Listener {
         var type: ConicSectionType = ConicSectionType.None
         var a = 0.0f
         var b = 0.0f
+        var d = 0.0f
 
         try {
             openFileInput(filename).use { stream ->
@@ -158,14 +159,16 @@ class MainActivity : AppCompatActivity(), SavedFigureAdapter.Listener {
                         a = strA.toFloat()
                         val strB = bufferedReader.readLine()
                         b = strB.toFloat()
+                        val strD = bufferedReader.readLine()
+                        d = strD.toFloat()
                     }
                 }
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            return SavedFigure("", ConicSectionType.None, 0.0f, 0.0f)
+            return SavedFigure("", ConicSectionType.None, 0.0f, 0.0f, 0f)
         }
-        return SavedFigure(name, type, a, b)
+        return SavedFigure(name, type, a, b, d)
     }
 
     override fun onClick(savedFigure: SavedFigure) {
@@ -173,6 +176,7 @@ class MainActivity : AppCompatActivity(), SavedFigureAdapter.Listener {
         Globals.type = res.type
         Globals.a = res.a
         Globals.b = res.b
+        Globals.d = res.d
         val intent = Intent(this, ShowPlotActivity::class.java)
         startActivity(intent)
     }

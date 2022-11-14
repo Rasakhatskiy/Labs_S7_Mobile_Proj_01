@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,8 +17,6 @@ import java.io.BufferedWriter
 import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
-import java.nio.file.Files
-import java.nio.file.Paths
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -39,6 +39,14 @@ class ShowPlotActivity : AppCompatActivity() {
             ConicSectionType.Parabola -> supportActionBar!!.title = "Wow! Nice Parabola 🙀"
         }
 
+        if (Globals.type == ConicSectionType.Ellipse) {
+            binding.textViewArea.visibility = VISIBLE
+            binding.textViewLength.visibility = VISIBLE
+        } else {
+            binding.textViewArea.visibility = GONE
+            binding.textViewLength.visibility = GONE
+        }
+
         binding.buttonSaveFigure.setOnClickListener {
             showdialog()
         }
@@ -52,6 +60,9 @@ class ShowPlotActivity : AppCompatActivity() {
         val lineEntry3 = ArrayList<Entry>()
         val lineEntry4 = ArrayList<Entry>()
 
+        var xArc = 0f
+        var yArc = 0f
+
         if (Globals.type == ConicSectionType.Ellipse) {
             Globals.a = abs(Globals.a)
             Globals.b = abs(Globals.b)
@@ -61,11 +72,20 @@ class ShowPlotActivity : AppCompatActivity() {
 
             var x = -Globals.a
             while (x <= Globals.a) {
-                val y = Globals.SolveYforEllipce(x)
+                val y = Globals.solveEllipseY(x)
                 lineEntry1.add(Entry(x, y))
                 lineEntry2.add(Entry(x, -y))
                 x += step
             }
+
+            val length = Globals.getEllipseArcLength()
+            val area = Globals.getEllipseSectorArea()
+
+            binding.textViewArea.text = "Sector area: $area"
+            binding.textViewLength.text = "Arch length: $length"
+
+            xArc = Globals.getEllipsePointByAngle()
+            yArc = Globals.solveEllipseY(xArc)
         }
 
         if (Globals.type == ConicSectionType.Hyperbola) {
@@ -77,7 +97,7 @@ class ShowPlotActivity : AppCompatActivity() {
 
             var x = -Globals.a - range
             while (x <= -Globals.a) {
-                val y = Globals.SolveYforHyperbola(x)
+                val y = Globals.solveHyperbolaY(x)
                 lineEntry1.add(Entry(x, y))
                 lineEntry2.add(Entry(x, -y))
                 x += step
@@ -85,14 +105,14 @@ class ShowPlotActivity : AppCompatActivity() {
 
             if (x != -Globals.a) {
                 x = -Globals.a
-                val y = Globals.SolveYforHyperbola(x)
+                val y = Globals.solveHyperbolaY(x)
                 lineEntry1.add(Entry(x, y))
                 lineEntry2.add(Entry(x, -y))
             }
 
             x = Globals.a
             while (x <= Globals.a + range) {
-                val y = Globals.SolveYforHyperbola(x)
+                val y = Globals.solveHyperbolaY(x)
                 lineEntry3.add(Entry(x, y))
                 lineEntry4.add(Entry(x, -y))
                 x += step
@@ -108,7 +128,7 @@ class ShowPlotActivity : AppCompatActivity() {
             var x = min(range, 0f)
             var dest = max(range, 0f)
             while (x <= dest) {
-                val y = Globals.SolveYforParabola(x)
+                val y = Globals.solveParabolaY(x)
                 lineEntry1.add(Entry(x, y))
                 lineEntry2.add(Entry(x, -y))
                 x += step
@@ -116,7 +136,7 @@ class ShowPlotActivity : AppCompatActivity() {
 
             if (x != dest) {
                 x = dest
-                val y = Globals.SolveYforParabola(x)
+                val y = Globals.solveParabolaY(x)
                 lineEntry1.add(Entry(x, y))
                 lineEntry2.add(Entry(x, -y))
             }
@@ -138,12 +158,22 @@ class ShowPlotActivity : AppCompatActivity() {
         lineDataset4.color = R.color.purple_500
         lineDataset4.setDrawCircles(false)
 
-//        val data = LineData(lineDataset1, lineDataset2)
+        // for ellipce
+        val lineEntryAngleLine1 = ArrayList<Entry>()
+        lineEntryAngleLine1.add(Entry(0f, 0f))
+        lineEntryAngleLine1.add(Entry(xArc, yArc))
+        val lineDatasetAngleLine1 = LineDataSet(lineEntryAngleLine1, "")
+
+        val lineEntryAngleLine2 = ArrayList<Entry>()
+        lineEntryAngleLine2.add(Entry(0f, 0f))
+        lineEntryAngleLine2.add(Entry(0f, Globals.b))
+        val lineDatasetAngleLine2 = LineDataSet(lineEntryAngleLine2, "")
 
         var data = LineData(lineDataset1, lineDataset2)
 
         when (Globals.type) {
-            ConicSectionType.Ellipse -> data = LineData(lineDataset1, lineDataset2)
+            ConicSectionType.Ellipse -> data =
+                LineData(lineDataset1, lineDataset2, lineDatasetAngleLine1, lineDatasetAngleLine2)
             ConicSectionType.Hyperbola -> data =
                 LineData(lineDataset1, lineDataset2, lineDataset3, lineDataset4)
             ConicSectionType.Parabola -> data = LineData(lineDataset1, lineDataset2)
@@ -194,7 +224,7 @@ class ShowPlotActivity : AppCompatActivity() {
                 saveToInternal(filename)
                 Toast.makeText(applicationContext, "saved", Toast.LENGTH_SHORT).show()
             }
-            builder.setNegativeButton("No") { dialog, _ -> dialog.cancel()}
+            builder.setNegativeButton("No") { dialog, _ -> dialog.cancel() }
             val alert = builder.create()
             alert.show()
         } else {
@@ -205,7 +235,7 @@ class ShowPlotActivity : AppCompatActivity() {
 
     fun saveToInternal(filename: String): Boolean {
         return try {
-            val savedFigure = SavedFigure(filename, Globals.type, Globals.a, Globals.b)
+            val savedFigure = SavedFigure(filename, Globals.type, Globals.a, Globals.b, Globals.d)
             openFileOutput(filename, MODE_PRIVATE).use { stream ->
                 OutputStreamWriter(stream).use { outputStreamWriter ->
                     BufferedWriter(outputStreamWriter).use { bufferedWriter ->
@@ -217,6 +247,8 @@ class ShowPlotActivity : AppCompatActivity() {
                         bufferedWriter.newLine()
                         bufferedWriter.write(savedFigure.b.toString())
                         bufferedWriter.newLine()
+                        bufferedWriter.write(savedFigure.d.toString())
+                        bufferedWriter.newLine()
                         true
                     }
                 }
@@ -226,7 +258,6 @@ class ShowPlotActivity : AppCompatActivity() {
             false
         }
     }
-
 
 
 }

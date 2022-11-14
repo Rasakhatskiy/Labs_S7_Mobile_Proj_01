@@ -35,16 +35,30 @@ class CreateEllipseActivity : AppCompatActivity() {
             binding.ellipseInputBP.visibility = VISIBLE
         }
 
+        if (Globals.type == ConicSectionType.Ellipse) {
+            binding.ellipseInputDegreeP.visibility = VISIBLE
+            binding.textViewOptional.visibility = VISIBLE
+        } else {
+            binding.ellipseInputDegreeP.visibility = GONE
+            binding.textViewOptional.visibility = GONE
+        }
+
 
         binding.buttonShowPlot.setOnClickListener {
             var a = 0f
             var b = 0f
+            var d = 0f
             try {
                 a = binding.ellipseInputA.text.toString().toFloat()
 
                 if (Globals.type != ConicSectionType.Parabola) {
                     b = binding.ellipseInputB.text.toString().toFloat()
                 }
+
+                if (Globals.type == ConicSectionType.Ellipse) {
+                    d = binding.ellipseInputDegree.text.toString().toFloat()
+                }
+
             } catch (e: NumberFormatException) {
                 Toast.makeText(applicationContext, "Invalid input!!!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -62,6 +76,7 @@ class CreateEllipseActivity : AppCompatActivity() {
 
             Globals.a = a
             Globals.b = b
+            Globals.d = d
 
             val intent = Intent(this, ShowPlotActivity::class.java)
             startActivity(intent)
