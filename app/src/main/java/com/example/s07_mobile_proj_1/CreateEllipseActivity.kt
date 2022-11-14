@@ -60,17 +60,22 @@ class CreateEllipseActivity : AppCompatActivity() {
                 }
 
             } catch (e: NumberFormatException) {
-                Toast.makeText(applicationContext, "Invalid input!!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Invalid input!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (a == 0f) {
-                Toast.makeText(applicationContext, "Division by 0!!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Division by 0", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (b == 0f && Globals.type != ConicSectionType.Parabola) {
-                Toast.makeText(applicationContext, "Division by 0!!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Division by 0", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if ((d < 0|| d > 180) && Globals.type == ConicSectionType.Ellipse) {
+                Toast.makeText(applicationContext, "Angle should be 0 <= d <= 180", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 

@@ -70,7 +70,7 @@ class Globals {
 
         fun getEllipseSectorArea(): Float {
             val r = d * Math.PI.toFloat() / 180.0f
-            return abs(0.5f * a * b * (tan((a * tan(r)) / b).pow(-1.0f)))
+            return abs(a * b * atan((a * tan(r)) / b) / 2)
         }
 
 

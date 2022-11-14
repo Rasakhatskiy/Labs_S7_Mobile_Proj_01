@@ -12,5 +12,5 @@
     <string name="create_ellipse">Ellipse</string>
     <string name="create_hyperbola">Hyperbola</string>
     <string name="create_parabola">Parabola</string>
-    <string name="optional_sector_degree_text">Sector angle</string>
+    <string name="optional_sector_degree_text">Sector angle (0 &lt;= α &lt;= 180)</string>
 </resources>
