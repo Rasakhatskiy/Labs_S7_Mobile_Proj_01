@@ -77,6 +77,10 @@ class ShowPlotActivity : AppCompatActivity() {
                 lineEntry2.add(Entry(x, -y))
                 x += step
             }
+            x = Globals.a
+            val y = Globals.solveEllipseY(x)
+            lineEntry1.add(Entry(x, y))
+            lineEntry2.add(Entry(x, -y))
 
             val length = Globals.getEllipseArcLength()
             val area = Globals.getEllipseSectorArea()
@@ -166,7 +170,7 @@ class ShowPlotActivity : AppCompatActivity() {
 
         val lineEntryAngleLine2 = ArrayList<Entry>()
         lineEntryAngleLine2.add(Entry(0f, 0f))
-        lineEntryAngleLine2.add(Entry(0f, Globals.b))
+        lineEntryAngleLine2.add(Entry(Globals.a, 0f))
         val lineDatasetAngleLine2 = LineDataSet(lineEntryAngleLine2, "")
 
         var data = LineData(lineDataset1, lineDataset2)
