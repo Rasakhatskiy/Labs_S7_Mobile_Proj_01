@@ -8,9 +8,18 @@
     android:layout_marginStart="16dp"
     >
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="Про автора:"
+        android:textSize="34sp" />
+
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/best_developer" />
 
@@ -19,9 +28,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:text="Студент групи ТТП-42\nРасахацький Максим"
+        android:gravity="center"
+        android:text="\nВиконав студент групи\nТТП-42\n\nРасахацький Максим"
         android:textSize="20sp" />
-
 
 
 </LinearLayout>
