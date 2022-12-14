@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="bg_color">#CC000000</color>
+
+    <color name="cell_background_color">#ffffff</color>
+    <color name="header_line_color">#0a0a0a</color>
+    <color name="table_view_default_text_color">#0a0a0a</color>
 </resources>

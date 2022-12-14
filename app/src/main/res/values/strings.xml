@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Лабораторна робота 1</string>
+    <string name="app_name">Супер проєкт по мобілкам</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -13,4 +13,5 @@
     <string name="create_hyperbola">Hyperbola</string>
     <string name="create_parabola">Parabola</string>
     <string name="optional_sector_degree_text">Sector angle (0 &lt;= α &lt;= 180)</string>
+    <string name="lab_1_title">Проєкт 1 💀</string>
 </resources>
